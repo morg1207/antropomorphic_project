@@ -10,7 +10,9 @@ import os
 # To make display prety
 printing.init_printing(use_latex = True)
 
-class MatrixGerarate():
+class MatrixGerarate(object):
+
+
     theta_i = Symbol("theta_i")
     alpha_i = Symbol("alpha_i")
     r_i = Symbol("r_i")
