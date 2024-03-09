@@ -54,12 +54,13 @@ class ComputeIk():
 
         #espacio de trabajo del robot
         D = sqrt(pow(Pee_x,2.0) + pow(Pee_y,2.0) + pow(Pee_z,2.0))
-        r_work = r1 + r2
+        r_work = r2 + r3
 
         possible_solution = False
-        if (D >= r_work ):
+        if (D <= r_work ):
             possible_solution = True
         else:
+            print("Fuera de espacio de trabajo")
             pass
         
 
@@ -89,7 +90,7 @@ class ComputeIk():
             denominator_3 = E
             
             theta_3 = atan2(numerator_3, denominator_3)
-            
+
             #limites
             lim_inf_theta_3 = -3.0*pi/4.0
             lim_sup_theta_3 = 3.0*pi/4.0
@@ -124,7 +125,7 @@ class ComputeIk():
                 theta_2 = theta_2 + 2*pi
             #limites
             lim_inf_theta_2 = -pi/4
-            lim_sup_theta_2 = 3.0*pi/4
+            lim_sup_theta_2 = 5.0*pi/4
             
             if(theta_2<= lim_inf_theta_2 or theta_2>= lim_sup_theta_2):
                 possible_solution = False
@@ -136,29 +137,30 @@ class ComputeIk():
         return theta_array, possible_solution
         
 
-def calculate_ik(Pee_x, Pee_y, Pee_z, DH_parameters):
+def calculate_ik(Pee_x, Pee_y, Pee_z, DH_parameters, elbow_config = "plus-minus"):
 
     ik = ComputeIk(DH_parameters = DH_parameters)
     
+    elbow_config_string = elbow_config
+    policies = elbow_config_string.split("-")
+
+    # La variable 'result' ahora será una lista con dos strings
+    # Puedes acceder a cada uno de ellos por índice
+    theta_2_config = policies[0]
+    theta_3_config = policies[1]
+
+
     end_effector_pose = EndEffectorWorkingSpace(Pee_x = Pee_x,
                                                 Pee_y = Pee_y,
                                                 Pee_z = Pee_z)
 
-    thetas, possible_solution = ik.compute_ik(end_effector_pose=end_effector_pose,theta_2_config = "plus", theta_3_config = "plus")
+                                
+    thetas, possible_solution = ik.compute_ik(end_effector_pose=end_effector_pose,theta_2_config = theta_2_config, theta_3_config = theta_3_config)
     print("Angles thetas solved ="+str(thetas))
     print("possible_solution = "+str(possible_solution))
-    
-    thetas, possible_solution = ik.compute_ik(end_effector_pose=end_effector_pose,theta_2_config = "plus", theta_3_config = "minus")
-    print("Angles thetas solved ="+str(thetas))
-    print("possible_solution = "+str(possible_solution))
-    
-    thetas, possible_solution = ik.compute_ik(end_effector_pose=end_effector_pose,theta_2_config = "minus", theta_3_config = "plus")
-    print("Angles thetas solved ="+str(thetas))
-    print("possible_solution = "+str(possible_solution))
-    
-    thetas, possible_solution = ik.compute_ik(end_effector_pose=end_effector_pose,theta_2_config = "minus", theta_3_config = "minus")
-    print("Angles thetas solved ="+str(thetas))
-    print("possible_solution = "+str(possible_solution))
+
+    return thetas, possible_solution
+
 
 if __name__ == '__main__':
     
@@ -176,9 +178,11 @@ if __name__ == '__main__':
     Pee_y = 0.6
     Pee_z = 0.7
 
-
     rospy.init_node('ik_kinematics_node', anonymous=True)
     try:
-       calculate_ik(Pee_x=Pee_x, Pee_y=Pee_y, Pee_z=Pee_z ,DH_parameters=DH_parameters)
+        calculate_ik(Pee_x=Pee_x, Pee_y=Pee_y, Pee_z=Pee_z ,DH_parameters=DH_parameters, elbow_config = "plus-plus")
+        calculate_ik(Pee_x=Pee_x, Pee_y=Pee_y, Pee_z=Pee_z ,DH_parameters=DH_parameters, elbow_config = "plus-minus")
+        calculate_ik(Pee_x=Pee_x, Pee_y=Pee_y, Pee_z=Pee_z ,DH_parameters=DH_parameters, elbow_config = "minus-plus")
+        calculate_ik(Pee_x=Pee_x, Pee_y=Pee_y, Pee_z=Pee_z ,DH_parameters=DH_parameters, elbow_config = "minus-minus")
     except rospy.ROSInterruptException:
         pass

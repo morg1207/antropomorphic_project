@@ -94,11 +94,11 @@ class MatrixGerarate(object):
         if os.path.exists("A23.png"):
             os.remove("A23.png")
 
-        preview(A01_simplify, viewer='file', filename="A01.png", dvioptions=['-D','300'])
-        preview(A03_simplify, viewer='file', filename="A03.png", dvioptions=['-D','300'])
-        preview(A12_simplify, viewer='file', filename="A12.png", dvioptions=['-D','300'])
-        preview(A13_simplify, viewer='file', filename="A13.png", dvioptions=['-D','300'])
-        preview(A23_simplify, viewer='file', filename="A23.png", dvioptions=['-D','300'])
+        preview(A01_simplify, viewer='file', filename="/home/user/catkin_ws/src/antropomorphic_project/scripts/A01.png", dvioptions=['-D','300'])
+        preview(A03_simplify, viewer='file', filename="/home/user/catkin_ws/src/antropomorphic_project/scripts/A03.png", dvioptions=['-D','300'])
+        preview(A12_simplify, viewer='file', filename="/home/user/catkin_ws/src/antropomorphic_project/scripts/A12.png", dvioptions=['-D','300'])
+        preview(A13_simplify, viewer='file', filename="/home/user/catkin_ws/src/antropomorphic_project/scripts/A13.png", dvioptions=['-D','300'])
+        preview(A23_simplify, viewer='file', filename="/home/user/catkin_ws/src/antropomorphic_project/scripts/A23.png", dvioptions=['-D','300'])
 
 
 

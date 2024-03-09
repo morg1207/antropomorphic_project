@@ -1,8 +1,5 @@
-
-
 #!/usr/bin/env python3
 
-#!/usr/bin/env python3
 
 import rospy
 from sympy import Matrix, cos, sin, Symbol, simplify, trigsimp
